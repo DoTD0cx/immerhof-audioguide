@@ -1,0 +1,26 @@
+{
+    "name": "Audioguide de l'Ouvrage de l'Immerhof",
+    "short_name": "Immerhof",
+    "description": "Audioguide hors ligne de l'Ouvrage de l'Immerhof",
+    "lang": "fr-FR",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#eceee9",
+    "theme_color": "#1c2922",
+    "icons": [
+        {
+            "src": "images/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "images/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        }
+    ]
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#1c2922">
+
+    <title>Audioguide de l'Immerhof</title>
+
+    <link rel="stylesheet" href="./style.css">
+    <script src="./script.js"></script>
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="hero-overlay">
+            <p class="hero-label">Audioguide officiel</p>
+
+            <h1>Ouvrage de l'Immerhof</h1>
+
+            <p class="hero-text">
+                Découvrez l'intérieur de l'ouvrage à travers
+                les différentes étapes de la visite.
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="offline-panel">
+            <div>
+                <p class="small-title">Visite sans connexion</p>
+
+                <h2>Télécharger les contenus</h2>
+
+                <p>
+                    Téléchargez les pistes avant d'entrer dans
+                    l'ouvrage pour pouvoir les écouter hors ligne.
+                </p>
+            </div>
+
+            <button id="downloadButton" class="primary-button">
+                Télécharger la visite
+            </button>
+
+            <div
+                id="downloadProgress"
+                class="progress-container hidden"
+                aria-live="polite"
+            >
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+
+                <p id="progressText">
+                    Préparation du téléchargement…
+                </p>
+            </div>
+
+            <p id="offlineStatus" class="offline-status">
+                Les contenus ne sont pas encore téléchargés.
+            </p>
+        </section>
+
+        <section class="visit-section">
+
+            <div class="section-heading">
+                <div>
+                    <p class="small-title">Parcours intérieur</p>
+                    <h2>Les étapes de la visite</h2>
+                </div>
+
+                <span class="station-count">2 étapes</span>
+            </div>
+
+            <!-- Étape 1 : Entrée -->
+            <article class="audio-card">
+
+                <img
+                    src="Image/entree.jpg"
+                    alt="Entrée de l'ouvrage de l'Immerhof"
+                    class="station-image"
+                >
+
+                <div class="station-details">
+
+                    <div class="station-number">01</div>
+
+                    <div class="audio-content">
+
+                        <div class="audio-heading">
+                            <div>
+                                <p class="audio-category">
+                                    Première étape
+                                </p>
+
+                                <h3>L'entrée de l'ouvrage</h3>
+                            </div>
+
+                            <span
+                                class="audio-icon"
+                                aria-hidden="true"
+                            >
+                                🚪
+                            </span>
+                        </div>
+
+                        <p class="audio-description">
+                            Découvrez l'entrée de l'ouvrage,
+                            son organisation et les dispositifs
+                            qui permettaient de protéger l'accès.
+                        </p>
+
+                        <audio controls preload="metadata">
+                            <source
+                                src="Audio/entree.mp3"
+                                type="audio/mpeg"
+                            >
+
+                            Votre navigateur ne prend pas en charge
+                            la lecture audio.
+                        </audio>
+
+                    </div>
+                </div>
+            </article>
+
+            <!-- Étape 2 : Usine -->
+            <article class="audio-card">
+
+                <img
+                    src="Image/usine.jpg"
+                    alt="Usine électrique de l'ouvrage de l'Immerhof"
+                    class="station-image"
+                >
+
+                <div class="station-details">
+
+                    <div class="station-number">02</div>
+
+                    <div class="audio-content">
+
+                        <div class="audio-heading">
+                            <div>
+                                <p class="audio-category">
+                                    Deuxième étape
+                                </p>
+
+                                <h3>L'usine électrique</h3>
+                            </div>
+
+                            <span
+                                class="audio-icon"
+                                aria-hidden="true"
+                            >
+                                ⚙️
+                            </span>
+                        </div>
+
+                        <p class="audio-description">
+                            Découvrez comment l'ouvrage produisait
+                            son électricité et assurait son autonomie
+                            en cas de coupure du réseau extérieur.
+                        </p>
+
+                        <audio controls preload="metadata">
+                            <source
+                                src="Audio/usine.mp3"
+                                type="audio/mpeg"
+                            >
+
+                            Votre navigateur ne prend pas en charge
+                            la lecture audio.
+                        </audio>
+
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Association de l'Ouvrage de l'Immerhof</p>
+        <p class="footer-small">Audioguide de visite</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
