@@ -3,7 +3,7 @@
     "short_name": "Immerhof",
     "description": "Audioguide hors ligne de l'Ouvrage de l'Immerhof",
     "lang": "fr-FR",
-    "start_url": "./index.html",
+    "start_url": "./",
     "scope": "./",
     "display": "standalone",
     "orientation": "portrait",

@@ -7,9 +7,8 @@ const applicationFiles = [
     "./style.css",
     "./script.js",
     "./manifest.json",
-    "./images/immerhof.jpg",
-    "./images/icon-192.png",
-    "./images/icon-512.png",
+    "./Audio/entree.mp3",
+    "./Audio/usine.mp3",
     "./Image/entree.jpg",
     "./Image/usine.jpg"
 ];
