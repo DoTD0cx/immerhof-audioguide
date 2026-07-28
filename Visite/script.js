@@ -19,17 +19,10 @@ const offlineFiles = [
 ];
 
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-        try {
-            await navigator.serviceWorker.register("./service-worker.js");
-            console.log("Service worker installé.");
-        } catch (error) {
-            console.error(
-                "Impossible d'installer le service worker :",
-                error
-            );
-        }
-    });
+   navigator.serviceWorker.register('service-worker.js')
+   .then(function(){
+    console.log("Visité Téléchargée")
+   })
 }
 
 downloadButton.addEventListener("click", async () => {
