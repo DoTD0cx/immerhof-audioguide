@@ -1,4 +1,4 @@
-const APP_CACHE = "immerhof-interface-v4";
+const APP_CACHE = "immerhof-interface-v5";
 
 const APP_FILES = [
   "./",
@@ -18,13 +18,24 @@ self.addEventListener("install", event => {
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys()
+      .then(names =>
+        Promise.all(
+          names
+            .filter(name =>
+              name.startsWith("immerhof-interface-") &&
+              name !== APP_CACHE
+            )
+            .map(name => caches.delete(name))
+        )
+      )
+      .then(() => self.clients.claim())
+  );
 });
 
 self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") {
-    return;
-  }
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
