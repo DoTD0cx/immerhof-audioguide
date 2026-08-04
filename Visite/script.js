@@ -1,94 +1,32 @@
-const downloadButton = document.getElementById("downloadButton");
-const downloadProgress = document.getElementById("downloadProgress");
-const progressFill = document.getElementById("progressFill");
-const progressText = document.getElementById("progressText");
-const offlineStatus = document.getElementById("offlineStatus");
+const AUDIO_CACHE = "immerhof-audio-v1";
 
-const AUDIO_CACHE_NAME = "immerhof-audios-v1";
-
-const offlineFiles = [
-    "./",
-    "./index.html",
-    "./style.css",
-    "./script.js",
-    "./manifest.json",
-    "./Audio/entree.mp3",
-    "./Audio/usine.mp3",
-    "./Image/entree.jpg",
-    "./Image/usine.jpg"
+const audios = [
+    "Audio/entree.mp3",
+    "Audio/usine.mp3"
 ];
 
-if ("serviceWorker" in navigator) {
-   navigator.serviceWorker.register('service-worker.js')
-   .then(function(){
-    console.log("Visité Téléchargée")
-   })
-}
+const bouton = document.getElementById("downloadButton");
+const statut = document.getElementById("offlineStatus");
 
-downloadButton.addEventListener("click", async () => {
-    downloadButton.disabled = true;
-    downloadButton.textContent = "Téléchargement en cours…";
+bouton.addEventListener("click", async () => {
 
-    downloadProgress.classList.remove("hidden");
-    offlineStatus.classList.remove("ready");
+    bouton.disabled = true;
+    statut.textContent = "Téléchargement des audios...";
 
-    try {
-        const cache = await caches.open(AUDIO_CACHE_NAME);
+    const cache = await caches.open(AUDIO_CACHE);
 
-        for (let index = 0; index < offlineFiles.length; index++) {
-            const file = offlineFiles[index];
+    for (const audio of audios) {
 
-            progressText.textContent =
-                `Téléchargement ${index + 1} sur ${offlineFiles.length}`;
+        const response = await fetch(audio);
 
-            const percentage =
-                Math.round(((index + 1) / offlineFiles.length) * 100);
-
-            progressFill.style.width = `${percentage}%`;
-
-            const response = await fetch(file, {
-                cache: "reload"
-            });
-
-            if (!response.ok) {
-                throw new Error(
-                    `Erreur pendant le téléchargement de ${file}`
-                );
-            }
-
-            await cache.put(file, response);
+        if (!response.ok) {
+            statut.textContent = "Erreur : " + audio;
+            bouton.disabled = false;
+            return;
         }
 
-        localStorage.setItem("immerhofOfflineReady", "true");
-
-        downloadButton.textContent = "Visite téléchargée";
-        offlineStatus.textContent =
-            "✓ Les contenus sont disponibles hors connexion.";
-
-        offlineStatus.classList.add("ready");
-    } catch (error) {
-        console.error(error);
-
-        downloadButton.disabled = false;
-        downloadButton.textContent = "Réessayer le téléchargement";
-
-        offlineStatus.textContent =
-            "Le téléchargement a échoué. Vérifiez votre connexion.";
+        await cache.put(audio, response.clone());
     }
+
+    statut.textContent = "✓ Tous les audios sont téléchargés.";
 });
-
-function updateOfflineStatus() {
-    const isReady =
-        localStorage.getItem("immerhofOfflineReady") === "true";
-
-    if (isReady) {
-        downloadButton.textContent = "Mettre à jour la visite";
-
-        offlineStatus.textContent =
-            "✓ Une version hors connexion est déjà disponible.";
-
-        offlineStatus.classList.add("ready");
-    }
-}
-
-updateOfflineStatus();
