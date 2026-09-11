@@ -1,0 +1,486 @@
+/* =====================================================================
+   Audioguide — Petit ouvrage d'Immerhof
+   Association Le Tiburce
+   Identité : béton chaulé, tôle olive, rouge de minium.
+   Thème sombre assumé : l'écran est lu sous terre, en lumière basse.
+   ===================================================================== */
+
+:root {
+  /* Matières */
+  --sol:        #0F1210;   /* béton brut, biais olive */
+  --beton:      #171C16;   /* surfaces */
+  --beton-haut: #202719;   /* surfaces levées */
+  --trait:      #313A2C;   /* joints / filets */
+  --trait-fort: #4A563F;
+
+  /* Encres */
+  --chaux:      #ECEAE0;   /* badigeon de chaux : texte principal */
+  --chaux-2:    #A6AE97;   /* texte secondaire */
+  --chaux-3:    #77806A;   /* texte tertiaire */
+
+  /* Signaux */
+  --minium:     #A84A45;   /* minium de plomb : aplats, plaques, lecteur */
+  --minium-vif: #C4605A;   /* même rouge, éclairci pour le texte sur fond sombre */
+  --voyant:     #9DB37A;   /* voyant vert : disponible hors ligne */
+
+  --r: 3px;                /* rayon : tôle pliée, pas de rondeur molle */
+
+  --ui: "Archivo", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --plaque: "Barlow Condensed", "Oswald", "Arial Narrow", sans-serif;
+
+  --lecteur-h: 92px;       /* hauteur du lecteur fixe */
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--sol);
+  color: var(--chaux);
+  font-family: var(--ui);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  /* trame de béton très discrète */
+  background-image:
+    radial-gradient(120% 60% at 50% 0%, #1B211A 0%, transparent 70%);
+  background-repeat: no-repeat;
+}
+
+body.lecteur-actif { padding-bottom: calc(var(--lecteur-h) + env(safe-area-inset-bottom, 0px)); }
+
+.app-shell {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding-inline: 18px;
+  padding-block: 0 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+/* ---------------------------------------------------------------- Bandeau */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  padding-block: 22px 18px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--trait);
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--plaque);
+  font-size: clamp(23px, 6.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  line-height: 1;
+  color: var(--chaux);
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  font-family: var(--plaque);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--chaux-3);
+}
+
+.status-dot {
+  flex: 0 1 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  padding: 6px 10px 6px 9px;
+  border: 1px solid var(--trait);
+  border-radius: var(--r);
+  background: var(--beton);
+  font-family: var(--plaque);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--chaux-2);
+  white-space: nowrap;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: color .2s ease, border-color .2s ease;
+}
+
+.status-dot .voyant {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--chaux-3);
+  transition: background .2s ease;
+}
+
+/* disponible hors ligne */
+.status-dot[data-etat="pret"] { color: var(--voyant); border-color: #3C4A31; }
+.status-dot[data-etat="pret"] .voyant {
+  background: var(--voyant);
+  box-shadow: 0 0 7px rgba(157,179,122,.7);
+}
+
+/* enregistrement en cours */
+.status-dot[data-etat="encours"] { color: var(--minium-vif); border-color: #4A2C2A; }
+.status-dot[data-etat="encours"] .voyant {
+  background: var(--minium-vif);
+  animation: pulse 1.1s ease-in-out infinite;
+}
+
+/* échec : la pastille devient l'endroit où réessayer */
+.status-dot[data-etat="erreur"] { color: var(--minium-vif); border-color: var(--minium); }
+.status-dot[data-etat="erreur"] .voyant { background: var(--minium); }
+
+.status-dot:focus-visible { outline: 2px solid var(--minium-vif); outline-offset: 3px; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .35; transform: scale(.8); }
+}
+
+/* ----------------------------------------- Fil de progression, tout en haut */
+
+.ligne-progres {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  height: 2px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.ligne-progres span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: var(--minium-vif);
+  transition: width .3s ease, opacity .5s ease;
+}
+
+.ligne-progres.est-terminee span { opacity: 0; }
+
+/* ---------------------------------------------------------- Liste stations */
+
+.stations { display: flex; flex-direction: column; }
+
+.stations-entete {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--trait);
+}
+
+.stations-entete h2 {
+  margin: 0;
+  font-family: var(--plaque);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--chaux-2);
+}
+
+.stations-entete p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--chaux-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.station {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 13px 4px 13px 0;
+  border: 0;
+  border-bottom: 1px solid var(--trait);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.station:last-child { border-bottom: 0; }
+
+.station:hover .station-titre { color: var(--minium-vif); }
+
+/* plaque émaillée : chiffre sombre sur fond de chaux */
+.station-plaque {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 38px;
+  border-radius: 2px;
+  background: var(--chaux);
+  color: #12160F;
+  font-family: var(--plaque);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  transition: background .15s ease, color .15s ease;
+}
+
+.station-titre {
+  display: block;
+  font-family: var(--plaque);
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  transition: color .15s ease;
+}
+
+.station-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--chaux-3);
+  font-variant-numeric: tabular-nums;
+}
+
+.station-meta .ecoute { color: var(--voyant); }
+.station-meta .ecoute::before { content: "\2713\00a0"; }
+
+.station-icone {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--trait);
+  border-radius: 50%;
+  color: var(--chaux-2);
+}
+
+.station-icone svg { width: 13px; height: 13px; fill: currentColor; }
+
+/* station en cours */
+.station[aria-current="true"] .station-plaque { background: var(--minium); color: #FFF6F1; }
+.station[aria-current="true"] .station-titre { color: var(--minium-vif); }
+.station[aria-current="true"] .station-icone { border-color: var(--minium); color: var(--minium-vif); }
+
+.station.est-ecoutee .station-plaque { background: var(--trait-fort); color: var(--chaux-2); }
+
+.station:focus-visible,
+.download-button:focus-visible,
+.lecteur button:focus-visible,
+.lecteur input:focus-visible {
+  outline: 2px solid var(--minium-vif);
+  outline-offset: 3px;
+}
+
+/* barres d'égalisation sur la station en lecture */
+.vu { display: none; gap: 2px; align-items: flex-end; height: 12px; }
+.station[data-lecture="1"] .vu { display: inline-flex; }
+.station[data-lecture="1"] .duree-affichee { display: none; }
+.vu i {
+  width: 2px;
+  background: var(--minium-vif);
+  animation: vu .9s ease-in-out infinite;
+}
+.vu i:nth-child(1) { height: 5px;  animation-delay: 0s; }
+.vu i:nth-child(2) { height: 11px; animation-delay: .18s; }
+.vu i:nth-child(3) { height: 7px;  animation-delay: .36s; }
+
+@keyframes vu {
+  0%, 100% { transform: scaleY(.45); }
+  50%      { transform: scaleY(1); }
+}
+
+/* ------------------------------------------------------------ Lecteur fixe */
+
+.lecteur {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  transform: translateY(115%);
+  transition: transform .28s cubic-bezier(.2,.7,.3,1);
+  background: var(--beton-haut);
+  border-top: 1px solid var(--trait-fort);
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -14px 34px rgba(0,0,0,.5);
+}
+
+.lecteur.est-visible { transform: translateY(0); }
+
+.lecteur-inner {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lecteur-haut {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.lecteur-titre {
+  min-width: 0;
+  font-family: var(--plaque);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lecteur-titre b {
+  color: var(--minium-vif);
+  font-weight: 600;
+  margin-right: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lecteur-temps {
+  flex: none;
+  font-family: var(--plaque);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--chaux-3);
+  font-variant-numeric: tabular-nums;
+}
+
+/* barre de progression / scrub */
+.scrub {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  margin: -6px 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.scrub::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 99px;
+  background: linear-gradient(var(--minium), var(--minium)) 0/var(--avancement,0%) 100% no-repeat, #0C0F0B;
+}
+.scrub::-moz-range-track {
+  height: 4px;
+  border-radius: 99px;
+  background: linear-gradient(var(--minium), var(--minium)) 0/var(--avancement,0%) 100% no-repeat, #0C0F0B;
+}
+
+.scrub::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 15px;
+  height: 15px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: var(--chaux);
+  border: 3px solid var(--minium);
+}
+.scrub::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: 3px solid var(--minium);
+  border-radius: 50%;
+  background: var(--chaux);
+}
+
+.lecteur-commandes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 2px;
+}
+
+.lecteur button {
+  border: 1px solid var(--trait-fort);
+  background: transparent;
+  color: var(--chaux-2);
+  border-radius: var(--r);
+  height: 40px;
+  min-width: 52px;
+  padding: 0 10px;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  font-family: var(--plaque);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  transition: border-color .15s ease, color .15s ease;
+}
+
+.lecteur button:hover { color: var(--chaux); border-color: var(--chaux-3); }
+
+.lecteur .principal {
+  width: 58px;
+  min-width: 58px;
+  height: 48px;
+  border: 0;
+  background: var(--minium);
+  color: #FFF6F1;
+}
+.lecteur .principal:hover { background: var(--minium-vif); }
+.lecteur .principal svg { width: 17px; height: 17px; fill: currentColor; }
+
+.lecteur .fermer {
+  margin-left: auto;
+  min-width: 40px;
+  height: 40px;
+  padding: 0;
+}
+.lecteur .fermer svg { width: 13px; height: 13px; fill: currentColor; }
+
+.saut { font-variant-numeric: tabular-nums; }
+
+/* ----------------------------------------------------------------- Bas de page */
+
+footer {
+  border-top: 1px solid var(--trait);
+  padding-top: 18px;
+  color: var(--chaux-3);
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+footer strong {
+  font-family: var(--plaque);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chaux-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

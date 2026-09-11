@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0F1210">
+  <meta name="description" content="Audioguide de visite du petit ouvrage d'Immerhof, ligne Maginot — Association Le Tiburce.">
+  <title>Audioguide Immerhof</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icone-192.png" type="image/png" sizes="192x192">
+  <link rel="icon" href="./icone-512.png" type="image/png" sizes="512x512">
+  <link rel="apple-touch-icon" href="./icone-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Fil de progression de la mise en cache, discret, tout en haut -->
+  <div class="ligne-progres" id="ligneProgres" aria-hidden="true"><span id="progressFill"></span></div>
+
+  <main class="app-shell">
+
+    <header class="topbar">
+      <div>
+        <p class="brand">IMMERHOF</p>
+        <p class="subtitle">Petit ouvrage · Ligne Maginot</p>
+      </div>
+      <button class="status-dot" id="statusDot" type="button" data-etat="vide"
+              aria-label="État de la disponibilité hors ligne">
+        <span class="voyant"></span><span id="statusText">En ligne</span>
+      </button>
+    </header>
+
+    <section aria-label="Stations de la visite">
+      <div class="stations-entete">
+        <h2>Parcours</h2>
+        <p id="compteurTotal">0 / 12 écoutées</p>
+      </div>
+      <div class="stations" id="stations"></div>
+    </section>
+
+    <footer>
+      <strong>Association Le Tiburce</strong>
+      <span>Petit ouvrage d'Immerhof — Hettange-Grande (Moselle)</span>
+    </footer>
+
+  </main>
+
+  <!-- Lecteur fixe : accessible au pouce, dans le noir, d'une seule main -->
+  <div class="lecteur" id="lecteur" role="region" aria-label="Lecteur audio">
+    <div class="lecteur-inner">
+      <div class="lecteur-haut">
+        <div class="lecteur-titre" id="lecteurTitre"><b>01</b>Entrée</div>
+        <div class="lecteur-temps" id="lecteurTemps">0:00 / 0:00</div>
+      </div>
+
+      <input class="scrub" id="scrub" type="range" min="0" max="100" step="0.1" value="0"
+             aria-label="Position dans l'audio">
+
+      <div class="lecteur-commandes">
+        <button type="button" id="btnRecul" class="saut" aria-label="Reculer de 15 secondes">−15 s</button>
+        <button type="button" id="btnPlay" class="principal" aria-label="Lire">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>
+        </button>
+        <button type="button" id="btnAvance" class="saut" aria-label="Avancer de 15 secondes">+15 s</button>
+        <button type="button" id="btnFermer" class="fermer" aria-label="Fermer le lecteur">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
