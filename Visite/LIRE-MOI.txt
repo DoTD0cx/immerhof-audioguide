@@ -1,0 +1,12 @@
+IMMERHOF — Interface simplifiée
+
+Remplacer uniquement index.html, style.css et script.js dans le dossier actuel de l’audioguide.
+Conserver tous les autres fichiers, notamment service-worker.js, connectivite.json, le manifeste, les icônes et les audios.
+
+Seule la pastille en haut à droite affiche la préparation et permet de réessayer.
+« Votre visite est prête » apparaît au-dessus des stations après lecture et vérification des copies des audios et des neuf ressources de l’interface actuelle.
+Le nombre de stations est calculé depuis stations.
+Les anciens éléments de préparation sont masqués et retirés du parcours clavier ; leurs références internes sont conservées pour ne pas toucher aux fonctions validées.
+Le service worker et les fonctions de téléchargement, lecture, progression et nettoyage sont inchangés.
+
+Validation : 30 scénarios simulés réussis. Aucun test sur téléphone réel pour cette modification.
