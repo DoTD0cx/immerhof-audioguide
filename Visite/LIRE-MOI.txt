@@ -1,0 +1,17 @@
+IMMERHOF — Animations sobres de fin de visite
+
+Remplacer uniquement index.html, style.css et script.js.
+Conserver le service worker, connectivite.json, le manifeste, les icônes, les audios et les autres fichiers.
+
+Présentation ajoutée sur les états existants :
+- Apparition douce de l’écran et des textes dès la fin de visite ; blocage immédiat inchangé.
+- Trois points discrets pendant l’attente. Aucune progression ni indication technique.
+- Après succès confirmé uniquement : fondu de l’ancien contenu, cercle SVG tracé, coche tracée puis léger agrandissement.
+- Validation : 880 ms, puis fondu du message de fermeture pendant 240 ms.
+- Avec prefers-reduced-motion : animations désactivées et confirmation directe.
+
+Aucune dépendance supplémentaire, aucun fichier SVG externe, aucune bibliothèque.
+Le seul ajout JavaScript concerne la transition visuelle ; il ne change aucune condition ou opération de progression, de connexion, de stockage ou de nouvelle tentative.
+
+45 scénarios simulés réussis. CSS analysé sans erreur.
+Le rendu animé sur téléphone réel reste à vérifier.
