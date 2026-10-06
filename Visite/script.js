@@ -10,18 +10,18 @@
    ===================================================================== */
 
 const stations = [
-  { numero: "01", titre: "Entrée",                  audio: "./Audio/01-entree.mp3",          duree: 62  },
-  { numero: "02", titre: "Chambre de tir",          audio: "./Audio/02-chambre-tir.mp3",     duree: 369 },
-  { numero: "03", titre: "Radio TSF",               audio: "./Audio/03-radio-tsf.mp3",       duree: 97  },
-  { numero: "04", titre: "Équipe Z",                audio: "./Audio/04-equipe-z.mp3",        duree: 110 },
-  { numero: "05", titre: "Magasin",                 audio: "./Audio/05-magasin.mp3",         duree: 67  },
-  { numero: "06", titre: "Bloc de défense interne", audio: "./Audio/06-defense-interne.mp3", duree: 122 },
-  { numero: "07", titre: "Usine",                   audio: "./Audio/07-usine.mp3",           duree: 52  },
-  { numero: "08", titre: "Cuisine",                 audio: "./Audio/08-cuisine.mp3",         duree: 34  },
-  { numero: "09", titre: "Infirmerie",              audio: "./Audio/09-infirmerie.mp3",      duree: 62  },
-  { numero: "10", titre: "Casernement",             audio: "./Audio/10-casernement.mp3",     duree: 54  },
-  { numero: "11", titre: "Bloc 1 et Bloc 2",        audio: "./Audio/11-infanterie.mp3",      duree: 44  },
-  { numero: "12", titre: "Bloc 3",                  audio: "./Audio/12-bloc-3.mp3",          duree: 104 }
+  { numero: "01", titre: "Entrée",                  audio: "./Audio/01-entree.mp3",          duree: 37.008  },
+  { numero: "02", titre: "Chambre de tir",          audio: "./Audio/02-chambre-tir.mp3",     duree: 46.032 },
+  { numero: "03", titre: "Radio TSF",               audio: "./Audio/03-radio-tsf.mp3",       duree: 45.936  },
+  { numero: "04", titre: "Équipe Z",                audio: "./Audio/04-equipe-z.mp3",        duree: 58.728 },
+  { numero: "05", titre: "Magasin",                 audio: "./Audio/05-magasin.mp3",         duree: 43.56  },
+  { numero: "06", titre: "Bloc de défense interne", audio: "./Audio/06-defense-interne.mp3", duree: 65.04 },
+  { numero: "07", titre: "Usine",                   audio: "./Audio/07-usine.mp3",           duree: 52.296  },
+  { numero: "08", titre: "Cuisine",                 audio: "./Audio/08-cuisine.mp3",         duree: 33.72  },
+  { numero: "09", titre: "Infirmerie",              audio: "./Audio/09-infirmerie.mp3",      duree: 61.896  },
+  { numero: "10", titre: "Casernement",             audio: "./Audio/10-casernement.mp3",     duree: 53.784  },
+  { numero: "11", titre: "Bloc 1 et Bloc 2",        audio: "./Audio/11-infanterie.mp3",      duree: 44.28  },
+  { numero: "12", titre: "Bloc 3",                  audio: "./Audio/12-bloc-3.mp3",          duree: 103.752 }
 ];
 
 /* ------------------------------------------------------------------ */
